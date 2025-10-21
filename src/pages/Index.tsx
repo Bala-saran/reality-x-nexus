@@ -49,10 +49,6 @@ const Index = () => {
               <Calendar className="mr-2 h-4 w-4" />
               Events
             </Button>
-            <Button onClick={() => navigate('/leaderboard')} variant="ghost" className="text-white hover:text-primary">
-              <Trophy className="mr-2 h-4 w-4" />
-              Leaderboard
-            </Button>
             <Button onClick={() => navigate('/gallery')} variant="ghost" className="text-white hover:text-primary">
               <ImageIcon className="mr-2 h-4 w-4" />
               Gallery
@@ -82,14 +78,6 @@ const Index = () => {
             ✨ Innovate • Create • Dominate — The Reality X Way! ✨
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-8">
-            <Button 
-              size="lg" 
-              onClick={() => navigate('/leaderboard')}
-              className="glass-effect glow-border hover:neon-glow transition-all"
-            >
-              <Trophy className="mr-2 h-5 w-5" />
-              View Leaderboard
-            </Button>
             <Button 
               size="lg" 
               variant="outline"
