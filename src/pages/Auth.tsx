@@ -11,7 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [registerNumber, setRegisterNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -29,52 +28,20 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      if (isSignUp) {
-        // Sign up
-        const email = `${registerNumber}@realityx.club`;
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-          },
-        });
+      // Sign in
+      const email = `${registerNumber}@realityx.club`;
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        if (data.user) {
-          // Store register number in admin_credentials
-          const { error: credError } = await supabase
-            .from('admin_credentials')
-            .insert([{ 
-              register_number: registerNumber,
-              user_id: data.user.id 
-            }]);
-
-          if (credError) throw credError;
-
-          toast({
-            title: "Success!",
-            description: "Admin account created successfully.",
-          });
-          navigate('/admin');
-        }
-      } else {
-        // Sign in
-        const email = `${registerNumber}@realityx.club`;
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) throw error;
-
-        toast({
-          title: "Welcome back!",
-          description: "Successfully logged in.",
-        });
-        navigate('/admin');
-      }
+      toast({
+        title: "Welcome back!",
+        description: "Successfully logged in.",
+      });
+      navigate('/admin');
     } catch (error: any) {
       toast({
         title: "Error",
@@ -100,13 +67,10 @@ const Auth = () => {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold glow-text">
-            {isSignUp ? 'Create Admin Account' : 'Admin Login'}
+            Admin Login
           </CardTitle>
           <CardDescription>
-            {isSignUp 
-              ? 'Set up your admin credentials' 
-              : 'Enter your credentials to access the dashboard'
-            }
+            Enter your credentials to access the dashboard
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -140,21 +104,9 @@ const Auth = () => {
               disabled={loading}
             >
               <Lock className="mr-2 h-4 w-4" />
-              {loading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Login')}
+              {loading ? 'Processing...' : 'Login'}
             </Button>
           </form>
-          
-          <div className="mt-4 text-center text-sm">
-            <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-primary hover:underline"
-            >
-              {isSignUp 
-                ? 'Already have an account? Login' 
-                : "Don't have an account? Sign up"
-              }
-            </button>
-          </div>
 
           <Button
             variant="outline"
