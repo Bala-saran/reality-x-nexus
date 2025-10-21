@@ -37,7 +37,7 @@ const Gallery = () => {
 
         <div className="text-center mb-12 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <ImageIcon className="h-10 w-10 text-primary animate-float" />
+            <ImageIcon className="h-10 w-10 text-[hsl(var(--primary-glow))] animate-float drop-shadow-[0_0_10px_hsl(var(--primary-glow))]" />
             <h1 className="text-5xl font-bold glow-text">Gallery</h1>
           </div>
           <p className="text-xl text-muted-foreground">Moments captured from Reality X Club</p>

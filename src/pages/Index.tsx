@@ -92,7 +92,7 @@ const Index = () => {
       {/* Events Section */}
       <section className="relative z-10 container mx-auto px-4 py-12">
         <div className="flex items-center justify-center gap-3 mb-8">
-          <Calendar className="h-8 w-8 text-primary animate-float" />
+          <Calendar className="h-8 w-8 text-[hsl(var(--primary-glow))] animate-float drop-shadow-[0_0_10px_hsl(var(--primary-glow))]" />
           <h3 className="text-3xl font-bold glow-text">Upcoming Events</h3>
         </div>
         
