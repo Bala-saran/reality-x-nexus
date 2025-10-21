@@ -44,17 +44,31 @@ const Index = () => {
       <header className="relative z-10 border-b border-border/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold glow-text animate-glow-pulse">REALITY X CLUB</h1>
-          {user ? (
-            <Button onClick={() => navigate('/admin')} className="glow-border">
-              <Shield className="mr-2 h-4 w-4" />
-              Admin Dashboard
+          <div className="flex items-center gap-3">
+            <Button onClick={() => navigate('/')} variant="ghost" className="text-white hover:text-primary">
+              <Calendar className="mr-2 h-4 w-4" />
+              Events
             </Button>
-          ) : (
-            <Button onClick={() => navigate('/auth')} className="glow-border">
-              <Shield className="mr-2 h-4 w-4" />
-              Admin Login
+            <Button onClick={() => navigate('/leaderboard')} variant="ghost" className="text-white hover:text-primary">
+              <Trophy className="mr-2 h-4 w-4" />
+              Leaderboard
             </Button>
-          )}
+            <Button onClick={() => navigate('/gallery')} variant="ghost" className="text-white hover:text-primary">
+              <ImageIcon className="mr-2 h-4 w-4" />
+              Gallery
+            </Button>
+            {user ? (
+              <Button onClick={() => navigate('/admin')} className="glow-border ml-2">
+                <Shield className="mr-2 h-4 w-4" />
+                Admin
+              </Button>
+            ) : (
+              <Button onClick={() => navigate('/auth')} className="glow-border ml-2">
+                <Shield className="mr-2 h-4 w-4" />
+                Login
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 

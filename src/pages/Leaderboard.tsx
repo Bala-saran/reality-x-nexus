@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Trophy, Medal, ArrowLeft } from "lucide-react";
+import { Trophy, Medal, ArrowLeft, Image as ImageIcon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const Leaderboard = () => {
@@ -40,15 +40,28 @@ const Leaderboard = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-card to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
 
+      {/* Header */}
+      <header className="relative z-10 border-b border-border/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold glow-text">REALITY X CLUB</h1>
+          <div className="flex items-center gap-3">
+            <Button onClick={() => navigate('/')} variant="ghost" className="text-white hover:text-primary">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Events
+            </Button>
+            <Button onClick={() => navigate('/leaderboard')} variant="ghost" className="text-white hover:text-primary">
+              <Trophy className="mr-2 h-4 w-4" />
+              Leaderboard
+            </Button>
+            <Button onClick={() => navigate('/gallery')} variant="ghost" className="text-white hover:text-primary">
+              <ImageIcon className="mr-2 h-4 w-4" />
+              Gallery
+            </Button>
+          </div>
+        </div>
+      </header>
+
       <div className="relative z-10 container mx-auto px-4 py-8">
-        <Button
-          variant="outline"
-          onClick={() => navigate('/')}
-          className="mb-6 glass-effect glow-border"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Home
-        </Button>
 
         <div className="text-center mb-12 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
