@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, Calendar, Trophy, Image as ImageIcon } from "lucide-react";
 import EventCard from "@/components/EventCard";
 import { useQuery } from "@tanstack/react-query";
+import logo from "@/assets/reality-x-logo.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ const Index = () => {
       
       {/* Header */}
       <header className="relative z-10 border-b border-border/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-end items-center">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <img src={logo} alt="Reality X Club" className="h-16 w-16 object-contain" />
           <div className="flex items-center gap-3">
             <Button onClick={() => navigate('/')} variant="ghost" className="text-white hover:text-primary">
               <Calendar className="mr-2 h-4 w-4" />
