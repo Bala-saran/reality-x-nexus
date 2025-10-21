@@ -42,8 +42,7 @@ const Index = () => {
       
       {/* Header */}
       <header className="relative z-10 border-b border-border/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-3xl font-bold glow-text animate-glow-pulse">REALITY X CLUB</h1>
+        <div className="container mx-auto px-4 py-4 flex justify-end items-center">
           <div className="flex items-center gap-3">
             <Button onClick={() => navigate('/')} variant="ghost" className="text-white hover:text-primary">
               <Calendar className="mr-2 h-4 w-4" />
