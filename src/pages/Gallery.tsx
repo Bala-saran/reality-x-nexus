@@ -57,7 +57,7 @@ const Gallery = () => {
         </div>
 
         {gallery.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {gallery.map((item, index) => (
               <Card 
                 key={item.id}
@@ -70,12 +70,24 @@ const Gallery = () => {
                     alt={item.title || 'Gallery image'}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {item.title && (
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                      {item.title}
-                    </div>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-card/95 via-card/50 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 text-white">
+                    {item.title && (
+                      <h3 className="font-bold text-base md:text-lg mb-1">{item.title}</h3>
+                    )}
+                    {item.description && (
+                      <p className="text-xs md:text-sm text-white/90 mb-2 line-clamp-2">{item.description}</p>
+                    )}
+                    {item.event_date && (
+                      <p className="text-xs text-white/80">
+                        {new Date(item.event_date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </Card>
             ))}

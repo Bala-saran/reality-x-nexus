@@ -4,16 +4,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const GalleryManager = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
-    image_url: '',
+    description: '',
+    event_date: '',
   });
 
   const { data: gallery = [] } = useQuery({
@@ -29,19 +33,26 @@ const GalleryManager = () => {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data: typeof formData) => {
+    mutationFn: async (data: { image_url: string; title: string; description: string; event_date: string }) => {
       const { error } = await supabase.from('gallery').insert([data]);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['gallery'] });
       toast({ title: "Success", description: "Image added successfully" });
-      setFormData({ title: '', image_url: '' });
+      setFormData({ title: '', description: '', event_date: '' });
+      setImageFile(null);
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async ({ id, imageUrl }: { id: string; imageUrl: string }) => {
+      // Delete image from storage
+      const imagePath = imageUrl.split('/').pop();
+      if (imagePath) {
+        await supabase.storage.from('gallery-images').remove([imagePath]);
+      }
+      // Delete record from database
       const { error } = await supabase.from('gallery').delete().eq('id', id);
       if (error) throw error;
     },
@@ -51,9 +62,46 @@ const GalleryManager = () => {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate(formData);
+    
+    if (!imageFile) {
+      toast({ title: "Error", description: "Please select an image", variant: "destructive" });
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      // Upload image to storage
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const { error: uploadError, data } = await supabase.storage
+        .from('gallery-images')
+        .upload(fileName, imageFile);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('gallery-images')
+        .getPublicUrl(fileName);
+
+      // Create gallery entry
+      await createMutation.mutateAsync({
+        ...formData,
+        image_url: publicUrl,
+      });
+
+    } catch (error: any) {
+      toast({ 
+        title: "Error", 
+        description: error.message,
+        variant: "destructive" 
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -65,30 +113,57 @@ const GalleryManager = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title (Optional)</Label>
+              <Label htmlFor="image">Image File</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  required
+                  className="glass-effect glow-border"
+                />
+                {imageFile && <Upload className="h-4 w-4 text-primary" />}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="Enter image title"
-                className="glass-effect glow-border"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="url">Image URL</Label>
-              <Input
-                id="url"
-                type="url"
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                placeholder="https://..."
                 required
                 className="glass-effect glow-border"
               />
             </div>
-            <Button type="submit" className="glow-border hover:neon-glow">
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="What happened at this event..."
+                className="glass-effect glow-border min-h-[80px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="date">Event Date</Label>
+              <Input
+                id="date"
+                type="date"
+                value={formData.event_date}
+                onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
+                className="glass-effect glow-border"
+              />
+            </div>
+            <Button 
+              type="submit" 
+              className="glow-border hover:neon-glow"
+              disabled={uploading || createMutation.isPending}
+            >
               <Plus className="mr-2 h-4 w-4" />
-              Add Image
+              {uploading || createMutation.isPending ? 'Uploading...' : 'Add Image'}
             </Button>
           </form>
         </CardContent>
@@ -107,18 +182,25 @@ const GalleryManager = () => {
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => deleteMutation.mutate(item.id)}
+                  onClick={() => deleteMutation.mutate({ id: item.id, imageUrl: item.image_url })}
+                  disabled={deleteMutation.isPending}
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete
                 </Button>
               </div>
             </div>
-            {item.title && (
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm">{item.title}</CardTitle>
-              </CardHeader>
-            )}
+            <CardHeader className="py-3 space-y-1">
+              <CardTitle className="text-sm">{item.title}</CardTitle>
+              {item.description && (
+                <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
+              )}
+              {item.event_date && (
+                <p className="text-xs text-muted-foreground">
+                  {new Date(item.event_date).toLocaleDateString()}
+                </p>
+              )}
+            </CardHeader>
           </Card>
         ))}
       </div>

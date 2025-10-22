@@ -71,18 +71,24 @@ export type Database = {
       gallery: {
         Row: {
           created_at: string
+          description: string | null
+          event_date: string | null
           id: string
           image_url: string
           title: string | null
         }
         Insert: {
           created_at?: string
+          description?: string | null
+          event_date?: string | null
           id?: string
           image_url: string
           title?: string | null
         }
         Update: {
           created_at?: string
+          description?: string | null
+          event_date?: string | null
           id?: string
           image_url?: string
           title?: string | null
