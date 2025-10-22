@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Shield, Calendar, Trophy, Image as ImageIcon } from "lucide-react";
+import { Calendar, Trophy, Image as ImageIcon } from "lucide-react";
 import EventCard from "@/components/EventCard";
 import { useQuery } from "@tanstack/react-query";
 import logo from "@/assets/reality-x-logo.jpg";
@@ -44,7 +44,12 @@ const Index = () => {
       {/* Header */}
       <header className="relative z-10 border-b border-border/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <img src={logo} alt="Reality X Club" className="h-16 w-16 object-contain" />
+          <img 
+            src={logo} 
+            alt="Reality X Club" 
+            className="h-16 w-16 object-contain cursor-pointer hover:opacity-80 transition-opacity" 
+            onClick={() => navigate('/admin')}
+          />
           <div className="flex items-center gap-3">
             <Button onClick={() => navigate('/')} variant="ghost" className="text-white hover:text-primary">
               <Calendar className="mr-2 h-4 w-4" />
@@ -58,17 +63,6 @@ const Index = () => {
               <ImageIcon className="mr-2 h-4 w-4" />
               Gallery
             </Button>
-            {user ? (
-              <Button onClick={() => navigate('/admin')} className="glow-border ml-2">
-                <Shield className="mr-2 h-4 w-4" />
-                Admin
-              </Button>
-            ) : (
-              <Button onClick={() => navigate('/auth')} className="glow-border ml-2">
-                <Shield className="mr-2 h-4 w-4" />
-                Login
-              </Button>
-            )}
           </div>
         </div>
       </header>
