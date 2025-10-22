@@ -114,6 +114,23 @@ const Index = () => {
           />
         ))}
       </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-border/50 backdrop-blur-sm mt-12">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center space-y-2">
+            <p className="text-lg font-semibold text-foreground">
+              Powered by V.BALASARAN
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Staff Members : Mrs.K.Srisathya & Mrs.G.Geetha
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Club Chairman : S.Vignesh
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
