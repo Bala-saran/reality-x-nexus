@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Image as ImageIcon, ArrowLeft, Trophy } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Image as ImageIcon, ArrowLeft, Trophy, X } from "lucide-react";
 
 const Gallery = () => {
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState<any>(null);
 
   const { data: gallery = [] } = useQuery({
     queryKey: ['gallery'],
@@ -61,8 +64,9 @@ const Gallery = () => {
             {gallery.map((item, index) => (
               <Card 
                 key={item.id}
-                className="glass-effect glow-border overflow-hidden group animate-fade-in hover:neon-glow transition-all"
+                className="glass-effect glow-border overflow-hidden group animate-fade-in hover:neon-glow transition-all cursor-pointer"
                 style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => setSelectedImage(item)}
               >
                 <div className="relative aspect-video overflow-hidden">
                   <img
@@ -99,6 +103,46 @@ const Gallery = () => {
           </div>
         )}
       </div>
+
+      {/* Full Size Image Dialog */}
+      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 overflow-hidden bg-black/95 border-border/50">
+          <button
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+          >
+            <X className="h-6 w-6 text-white" />
+          </button>
+          {selectedImage && (
+            <div className="relative w-full h-full flex items-center justify-center p-4">
+              <img
+                src={selectedImage.image_url}
+                alt={selectedImage.title || 'Gallery image'}
+                className="max-w-full max-h-[90vh] object-contain"
+              />
+              {(selectedImage.title || selectedImage.description || selectedImage.event_date) && (
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6 text-white">
+                  {selectedImage.title && (
+                    <h3 className="text-2xl font-bold mb-2">{selectedImage.title}</h3>
+                  )}
+                  {selectedImage.description && (
+                    <p className="text-sm mb-2">{selectedImage.description}</p>
+                  )}
+                  {selectedImage.event_date && (
+                    <p className="text-xs text-white/80">
+                      {new Date(selectedImage.event_date).toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

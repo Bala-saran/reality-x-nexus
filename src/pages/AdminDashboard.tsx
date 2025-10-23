@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Trophy, Image as ImageIcon, LogOut, Menu } from "lucide-react";
+import { Home, Calendar, Trophy, Image as ImageIcon, LogOut, Menu, Bell } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import EventsManager from "@/components/admin/EventsManager";
 import LeaderboardManager from "@/components/admin/LeaderboardManager";
 import GalleryManager from "@/components/admin/GalleryManager";
 import DashboardHome from "@/components/admin/DashboardHome";
+import NotificationSender from "@/components/admin/NotificationSender";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const AdminDashboard = () => {
     { id: 'events', label: 'Events', icon: Calendar },
     { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
     { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
   ];
 
   if (!user) return null;
@@ -123,6 +125,7 @@ const AdminDashboard = () => {
             {activeTab === 'events' && <EventsManager />}
             {activeTab === 'leaderboard' && <LeaderboardManager />}
             {activeTab === 'gallery' && <GalleryManager />}
+            {activeTab === 'notifications' && <NotificationSender />}
           </div>
         </div>
       </main>

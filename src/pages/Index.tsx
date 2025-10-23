@@ -6,10 +6,12 @@ import { Calendar, Trophy, Image as ImageIcon } from "lucide-react";
 import EventCard from "@/components/EventCard";
 import { useQuery } from "@tanstack/react-query";
 import logo from "@/assets/reality-x-logo.jpg";
+import NotificationPrompt from "@/components/NotificationPrompt";
 
 const Index = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -37,6 +39,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      <NotificationPrompt />
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-card to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
@@ -47,8 +50,28 @@ const Index = () => {
           <img 
             src={logo} 
             alt="Reality X Club" 
-            className="h-16 w-16 object-contain cursor-pointer hover:opacity-80 transition-opacity" 
-            onClick={() => navigate('/admin')}
+            className="h-16 w-16 object-contain cursor-pointer hover:opacity-80 transition-opacity select-none" 
+            onMouseDown={() => {
+              const timer = setTimeout(() => {
+                navigate('/admin');
+              }, 5000);
+              setPressTimer(timer);
+            }}
+            onMouseUp={() => {
+              if (pressTimer) clearTimeout(pressTimer);
+            }}
+            onMouseLeave={() => {
+              if (pressTimer) clearTimeout(pressTimer);
+            }}
+            onTouchStart={() => {
+              const timer = setTimeout(() => {
+                navigate('/admin');
+              }, 5000);
+              setPressTimer(timer);
+            }}
+            onTouchEnd={() => {
+              if (pressTimer) clearTimeout(pressTimer);
+            }}
           />
           <div className="flex items-center gap-3">
             <Button onClick={() => navigate('/')} variant="ghost" className="text-white hover:text-primary">
