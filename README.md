@@ -1,73 +1,153 @@
-# Welcome to your Lovable project
+# Reality X Nexus 🌐⚡
 
-## Project info
+> Official web platform for **Reality X Nexus** — a tech club — built with React, Supabase, and a production-grade database schema to manage members, events, and club activities.
 
-**URL**: https://lovable.dev/projects/2012fc9f-30f4-4f75-8089-1ce1d27f260b
+---
 
-## How can I edit this code?
+## 🏛️ About
 
-There are several ways of editing your application.
+Reality X Nexus is a technology club platform that brings members together around shared interests in emerging tech. This web app serves as the club's digital home — handling member profiles, event listings, announcements, and data-driven club insights.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2012fc9f-30f4-4f75-8089-1ce1d27f260b) and start prompting.
+## ✨ Features
 
-Changes made via Lovable will be committed automatically to this repo.
+- 👥 **Member Management** — Register, view, and manage club members
+- 📅 **Events & Activities** — Browse and track upcoming club events
+- 📊 **Club Analytics** — Visual dashboards powered by Recharts
+- 🔐 **Supabase Auth** — Secure member authentication
+- 🗄️ **Database Migrations** — Production-grade schema via PLpgSQL
+- ⚡ **Fast Data Fetching** — TanStack Query with caching and revalidation
+- 🌗 **Dark / Light Mode** — next-themes toggle
+- 📱 **Fully Responsive** — Mobile-first Tailwind CSS design
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+| Category | Technology |
+|---|---|
+| Framework | React 18 + TypeScript |
+| Build Tool | Vite |
+| Package Manager | Bun |
+| Styling | Tailwind CSS |
+| Components | shadcn/ui + Radix UI |
+| Backend / Auth | Supabase |
+| Database | PostgreSQL (via Supabase) |
+| Migrations | PLpgSQL |
+| Data Fetching | TanStack Query |
+| Routing | React Router DOM v6 |
+| Charts | Recharts |
+| Forms | React Hook Form + Zod |
+| Notifications | Sonner |
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🏗️ Architecture
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+React Frontend (Vite)
+        │
+        ├── React Router DOM  →  Multi-page routing
+        ├── TanStack Query    →  Server state & caching
+        └── Supabase Client   →  Auth + Database
+                │
+                ▼
+        Supabase (PostgreSQL)
+        ├── Authentication    →  Member login / signup
+        ├── Database          →  Members, Events, Posts
+        └── PLpgSQL Migrations → Version-controlled schema
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🗄️ Database
 
-**Use GitHub Codespaces**
+The `supabase/` folder contains version-controlled **PLpgSQL migrations** — the full relational schema for the club platform including tables for members, events, and club data.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+supabase/
+└── migrations/   # PostgreSQL migration files
+```
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 🚀 Getting Started
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Prerequisites
 
-## How can I deploy this project?
+- Node.js v18+ or [Bun](https://bun.sh/)
+- [Supabase](https://supabase.com/) project
 
-Simply open [Lovable](https://lovable.dev/projects/2012fc9f-30f4-4f75-8089-1ce1d27f260b) and click on Share -> Publish.
+### Installation
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+git clone https://github.com/Bala-saran/reality-x-nexus.git
+cd reality-x-nexus
+bun install
+```
 
-Yes, you can!
+### Environment Variables
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Run Locally
+
+```bash
+bun run dev
+```
+
+Open `http://localhost:5173`
+
+### Apply Database Migrations
+
+```bash
+# Using Supabase CLI
+supabase db push
+```
+
+---
+
+## 📁 Project Structure
+
+```
+reality-x-nexus/
+├── src/
+│   ├── components/     # UI components
+│   ├── pages/          # Route pages
+│   ├── hooks/          # Custom hooks (TanStack Query)
+│   └── lib/            # Supabase client, utilities
+├── supabase/
+│   └── migrations/     # PLpgSQL database migrations
+├── public/             # Static assets
+└── vite.config.ts
+```
+
+---
+
+## 📜 Scripts
+
+| Command | Description |
+|---|---|
+| `bun run dev` | Start development server |
+| `bun run build` | Production build |
+| `bun run preview` | Preview production build |
+| `bun run lint` | Run ESLint |
+
+---
+
+## 👨‍💻 Developer
+
+**Bala-saran** — [@Bala-saran](https://github.com/Bala-saran)
+
+- 🌐 Portfolio: [balasarans-portfolio.netlify.app](https://balasarans-portfolio.netlify.app)
+- 💼 LinkedIn: [linkedin.com/in/balasaran-v-380523309](https://linkedin.com/in/balasaran-v-380523309)
+
+---
+
+## 📜 License
+
+Built for Reality X Nexus Club. Open for reference and learning.
